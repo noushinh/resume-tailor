@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Resume Tailor — Transform passive resume bullets into quantified, high-impact statements matching target job descriptions.">
+  <title>Resume Tailor — High-Impact Bullet Generator</title>
+
+  <!-- Typography: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+</head>
+<body>
+
+  <!-- Main Container -->
+  <div class="app-layout">
+    
+    <!-- Top Header Bar -->
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="brand-badge">⚡ MMV</div>
+        <div class="brand-titles">
+          <h1 class="brand-title">Resume Tailor</h1>
+          <p class="brand-subtitle">Transform passive bullets into quantified impact</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="btn-sample" class="btn-text" type="button" title="Fill inputs with realistic sample data">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          Try Sample Data
+        </button>
+        <button id="btn-clear" class="btn-text btn-danger" type="button" title="Clear all text inputs">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          Clear
+        </button>
+      </div>
+    </header>
+
+    <!-- Error Banner -->
+    <div id="error-banner" class="alert-banner hidden" role="alert" aria-live="assertive">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-message" id="error-message">Something went wrong.</div>
+      <button id="error-dismiss" class="alert-close" type="button" aria-label="Dismiss error">✕</button>
+    </div>
+
+    <!-- Input Zone: Split Two-Column Grid -->
+    <section class="input-grid" aria-label="Input resume and job description">
+      
+      <!-- Left Column: Resume -->
+      <div class="input-card">
+        <div class="input-card-header">
+          <label for="resume-input" class="input-label">
+            <span class="label-number">1</span>
+            Your Current Resume Text
+          </label>
+          <span class="char-counter" id="resume-counter">0 chars</span>
+        </div>
+        <textarea
+          id="resume-input"
+          class="text-input"
+          placeholder="Paste your current resume bullets or experience here...&#10;&#10;e.g.&#10;• Managed social media accounts&#10;• Built user interface for checkout system&#10;• Fixed bugs reported by clients"
+          rows="9"
+          spellcheck="false"
+        ></textarea>
+        <div class="input-helper">Tip: Works with bullet points, numbered lists, or plain lines.</div>
+      </div>
+
+      <!-- Right Column: Target Job Description -->
+      <div class="input-card">
+        <div class="input-card-header">
+          <label for="job-input" class="input-label">
+            <span class="label-number">2</span>
+            Target Job Description
+          </label>
+          <span class="char-counter" id="job-counter">0 chars</span>
+        </div>
+        <textarea
+          id="job-input"
+          class="text-input"
+          placeholder="Paste the target job posting / responsibilities here...&#10;&#10;e.g.&#10;Looking for a Senior Software Engineer with expertise in React, high-scale web applications, defect reduction, and cross-functional leadership."
+          rows="9"
+          spellcheck="false"
+        ></textarea>
+        <div class="input-helper">Paste the responsibilities and qualifications sections.</div>
+      </div>
+
+    </section>
+
+    <!-- Action Bar -->
+    <section class="action-bar">
+      <button id="btn-tailor" class="btn-primary" type="button" disabled>
+        <span class="btn-spinner hidden" id="btn-spinner" aria-hidden="true"></span>
+        <span class="btn-label" id="btn-label">⚡ Tailor Bullets</span>
+      </button>
+
+      <!-- Phased Loading Indicator -->
+      <div id="loading-indicator" class="loading-state hidden" aria-live="polite">
+        <div class="pulse-dot"></div>
+        <span class="loading-phrase" id="loading-phrase">Analyzing role requirements...</span>
+      </div>
+    </section>
+
+    <!-- Results Zone: Comparison Matrix -->
+    <section id="results-zone" class="results-zone hidden" aria-label="Tailored comparison results">
+      
+      <!-- Results Header -->
+      <div class="results-header">
+        <div class="results-meta">
+          <div class="results-badge" id="results-count-badge">0 bullets upgraded</div>
+          <p class="role-summary-text" id="role-summary-text"></p>
+        </div>
+        <button id="btn-copy-all" class="btn-secondary" type="button">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          <span id="copy-all-label">Copy All Tailored Bullets</span>
+        </button>
+      </div>
+
+      <!-- Comparison Column Headers -->
+      <div class="matrix-column-headers">
+        <div class="col-head col-head-original">Original Resume Bullets</div>
+        <div class="col-head col-head-tailored">Tailored & Quantified Upgrade</div>
+      </div>
+
+      <!-- Comparison Cards Container -->
+      <div id="comparison-list" class="comparison-list" role="list">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+
+    </section>
+
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast hidden" role="status" aria-live="polite">
+    <span class="toast-icon">✓</span>
+    <span id="toast-text" class="toast-text">Copied to clipboard</span>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
