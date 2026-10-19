@@ -1,4 +1,4 @@
-⚡ Resume Tailor (restated again once clicked on folder)
+⚡ Resume Tailor (restated again once clicked on folder. Please click on folder to access all necessary information regarding Resume Tailor. Thank you 😊!!)
 
 Transform passive resume bullets into quantified, high-impact statements matched to your target role.
 
@@ -58,31 +58,3 @@ cd backend
 uv run pytest -v
 
 All external LLM calls are mocked in the test suite to ensure deterministic, fast, and free verification.
-
-📂 Project Structure
-
-coding-jam-setup/
-├── BRIEF.md                     # Initial project contract & scope
-├── product.md                   # PM design doc (PRD)
-├── ui.md                        # UX design specification
-├── engineering.md               # Engineering design doc & test plan
-├── README.md                    # Project documentation
-├── frontend/
-│   ├── index.html               # Dual-pane input & comparison matrix UI
-│   ├── style.css                # Clean editorial design system
-│   └── app.js                   # State machine, API calls & copy handlers
-└── backend/
-    ├── main.py                  # FastAPI server & static file mount
-    ├── models.py                # Pydantic request/response schemas
-    ├── generator.py             # Google GenAI SDK integration & JSON parser
-    ├── prompts.py               # Prompt templates & coaching guidelines
-    ├── text_utils.py            # Bullet parsing & normalization utility
-    ├── pyproject.toml           # Project dependencies & metadata (uv)
-    ├── requirements.txt         # Pip-compatible dependency list
-    ├── .env.example             # Environment template
-    └── tests/
-        ├── conftest.py          # Pytest path configuration
-        ├── test_text_utils.py   # Unit tests for bullet parsing
-        ├── test_models.py       # Pydantic schema validation tests
-        ├── test_generator.py    # Gemini response parsing tests
-        └── test_api.py          # FastAPI endpoint integration tests
