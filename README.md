@@ -58,6 +58,7 @@ cd backend
 uv run pytest -v
 
 All external LLM calls are mocked in the test suite to ensure deterministic, fast, and free verification.
+
 📂 Project Structure
 
 coding-jam-setup/
